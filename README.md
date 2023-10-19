@@ -13,8 +13,7 @@ We have two part of the app, expressjs base backend and react based frontend.
 # BEFORE YOU RUN
 Please make sure you have mongodb installed.
 Install all project dependencies with node command.
-`npm install`
-
+    `npm install --include dev`
 
 ## HOW TO RUN
 We need to first start the backend service and then start the frontend app
