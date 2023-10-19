@@ -4,6 +4,9 @@ import Task from "../models/task"
 import logger from "../utils/logger";
 import {baseHandler} from "./BaseController";
 import {TaskValidator, TaskStatusValidator} from '../validators/TaskValidator';
+import {ValidationError, TaskNotFoundError} from './Error';
+
+// TODO -- Add more validation and Specific Erorr message on error
 
 // get me all the tasks
 export const getTasks = async (req: Request, res: Response): Promise<Response> => {
@@ -13,7 +16,6 @@ export const getTasks = async (req: Request, res: Response): Promise<Response> =
         return res.status(200).json({ tasks})
     });
 }
-
 
 export const addTask = async (req: Request, res: Response): Promise<Response> => {
     // we are wrapping our req/res with base handler to make use of debugging and commons errors
@@ -33,7 +35,8 @@ export const updateTask = async (req: Request, res: Response): Promise<Response>
         // get task from body
         const {params:{id}, body} = req;
         const itask = body as ITask;
-        if(TaskValidator.validate(itask).error) throw Error("Validation error");
+        const validation = TaskValidator.validate(itask);
+        if(validation.error) throw new ValidationError(validation.error.message);
         logger.debug(JSON.stringify(TaskValidator.validate(itask)));
         const updatedTask: ITask = await Task.findByIdAndUpdate({_id:id}, itask,  {new:true});
         const allTasks: ITask[] = await Task.find()  
@@ -46,7 +49,8 @@ export const changeStatus = async (req: Request, res: Response): Promise<Respons
     return baseHandler(req, res, async (req: Request, res: Response) => {
        const {params:{id}, body} = req;
        const status = body.status;
-       if(TaskStatusValidator.validate(status).error) throw Error("Validation Error");
+       const validation = TaskStatusValidator.validate(status);
+       if(validation.error) throw new ValidationError(validation.error.message);
        const updatedTask: ITask = await Task.findByIdAndUpdate({_id:id}, {status:status}, {new:true});
        const allTasks: ITask[] = await Task.find()  
        return res.status(200).json({ message: "Change status of Task", task: updatedTask, tasks: allTasks})

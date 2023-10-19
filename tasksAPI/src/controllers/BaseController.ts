@@ -1,6 +1,7 @@
 import { Response, Request } from "express"
 import logger from "../utils/logger";
 import {Error} from "mongoose";
+import {ValidationError, TaskNotFoundError} from './Error';
 
 // wrapper handler to handle common errors and loggins 
 export const baseHandler = async (req: Request, res: Response,  handler: (req: Request, res: Response) => Promise<Response>): Promise<Response> => {
@@ -12,7 +13,9 @@ export const baseHandler = async (req: Request, res: Response,  handler: (req: R
         //ideally we should not be showing server error messages directly to user, but rather mask them 
         //So, we are masking error messages to useful infomration
         //if something fails with mongoose validation
-        if (e instanceof Error.ValidationError) {
+        if (e instanceof  ValidationError) {
+            message = e.message;
+        } else if (e instanceof Error.ValidationError) {
             message = "Error occurred in data validation while processing your request, Please check request paramenters. ";
         } else if (e instanceof Error) {
             message = "Error occurred while processing your request, please check your request";
