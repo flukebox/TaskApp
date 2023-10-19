@@ -10,6 +10,7 @@ export const baseHandler = async (req: Request, res: Response,  handler: (req: R
         return await handler(req, res);
     } catch (e) {
         let message = "";
+        let status = 400;
         //ideally we should not be showing server error messages directly to user, but rather mask them 
         //So, we are masking error messages to useful infomration
         //if something fails with mongoose validation
@@ -20,8 +21,10 @@ export const baseHandler = async (req: Request, res: Response,  handler: (req: R
         } else if (e instanceof Error) {
             message = "Error occurred while processing your request, please check your request";
         } else {
+            // some error occurred, which is not one of our expected errors, throw server erorr with 500
+            status = 500;
             message = "Error occurred while processing your request";
         }
-        return res.status(400).json({ message, data:req.body});
+        return res.status(status).json({ message, data:req.body});
     }
 }
