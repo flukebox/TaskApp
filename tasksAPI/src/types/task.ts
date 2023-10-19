@@ -4,5 +4,5 @@ import { Document } from "mongoose"
 export interface ITask extends Document {
   title: string
   description?: string
-  status: string
+  status: "To Do", "In Progress", "Done"
 }

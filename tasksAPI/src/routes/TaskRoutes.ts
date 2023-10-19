@@ -7,6 +7,7 @@ const TaskRoutes: Router = Router();
 TaskRoutes.get("/tasks", TaskController.getTasks);
 TaskRoutes.post("/add-task", TaskController.addTask);
 TaskRoutes.put("/update-tasks/:id", TaskController.updateTask);
+TaskRoutes.put("/change-status/:id", TaskController.changeStatus);
 TaskRoutes.delete("/delete-tasks/:id", TaskController.deleteTask);
 
 export default TaskRoutes;
