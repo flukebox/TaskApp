@@ -25,10 +25,14 @@ Below command will run this app in dev enviroment with hot reload.
 
 #### Exposed End Points
 - get me all the tasks
-`curl --location --request GET 'http://localhost:3333/api/v1/tasks' --header 'Content-Type: application/json'`
+```
+curl --location --request GET 'http://localhost:3333/api/v1/tasks' \
+--header 'Content-Type: application/json'`
+```
 
 - add a new tasks
-```curl --location 'http://localhost:3333/api/v1/add-task' \
+```
+curl --location 'http://localhost:3333/api/v1/add-task' \
 --header 'Content-Type: application/json' \
 --data '{
     "title": "YahoooTask",
@@ -57,7 +61,9 @@ curl --location --request PUT 'http://localhost:3333/api/v1/update-task/{TASK_ID
 }'
 ```
 - delete a task
-`curl --location --request DELETE 'http://localhost:3333/api/v1/delete-tasks/{TASK_ID}'`
+```
+curl --location --request DELETE 'http://localhost:3333/api/v1/delete-tasks/{TASK_ID}'`
+```
 
 ### Backend API -- Prod Environment
 Please first build the code with `npm run build`.
