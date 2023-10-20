@@ -23,6 +23,42 @@ How to run backend API for TaskAPP ?
 Below command will run this app in dev enviroment with hot reload.
 `npm run dev`.
 
+#### Exposed End Points
+- get me all the tasks
+`curl --location --request GET 'http://localhost:3333/api/v1/tasks' --header 'Content-Type: application/json'`
+
+- add a new tasks
+```curl --location 'http://localhost:3333/api/v1/add-task' \
+--header 'Content-Type: application/json' \
+--data '{
+    "title": "YahoooTask",
+    "description": "This is my first task",
+    "status": "To Do"
+```
+
+- update status of a task
+```
+curl --location --request PUT 'http://localhost:3333/api/v1/change-status/{TASK_ID}' \
+--header 'Content-Type: application/json' \
+--data '{
+    "status": "Done"
+    }'
+```
+
+
+- update a task
+```
+curl --location --request PUT 'http://localhost:3333/api/v1/update-task/{TASK_ID}' \
+--header 'Content-Type: application/json' \
+--data '{
+    "title": "NewTitile",
+    "description": "This is my first task",
+    "status": "To Do"
+}'
+```
+- delete a task
+`curl --location --request DELETE 'http://localhost:3333/api/v1/delete-tasks/{TASK_ID}'`
+
 ### Backend API -- Prod Environment
 Please first build the code with `npm run build`.
 Then run the produciton code in dist with `npm run prod`.
