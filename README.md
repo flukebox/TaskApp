@@ -12,17 +12,20 @@ We have two part of the app, expressjs base backend and react based frontend.
 
 # BEFORE YOU RUN
 Please make sure you have mongodb installed.
-Install all project dependencies with node command.
-```
-npm install --include dev
-```
-
 
 ## HOW TO RUN
 We need to first start the backend service and then start the frontend app
 
 ### Backend API -- Test Environment
 How to run backend API for TaskAPP ?
+
+Install all project dependencies with node command.
+```
+npm install --include dev
+```
+
+Also, make `.env` file in  `tasksAPI` folder. Plesae check `sample.env` for reference.
+
 Below command will run this app in dev enviroment with hot reload.
 ```
 npm run dev
