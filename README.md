@@ -13,7 +13,10 @@ We have two part of the app, expressjs base backend and react based frontend.
 # BEFORE YOU RUN
 Please make sure you have mongodb installed.
 Install all project dependencies with node command.
-`npm install --include dev`
+```
+npm install --include dev
+```
+
 
 ## HOW TO RUN
 We need to first start the backend service and then start the frontend app
@@ -21,7 +24,9 @@ We need to first start the backend service and then start the frontend app
 ### Backend API -- Test Environment
 How to run backend API for TaskAPP ?
 Below command will run this app in dev enviroment with hot reload.
-`npm run dev`.
+```
+npm run dev
+```
 
 #### Exposed End Points
 - get me all the tasks
@@ -66,8 +71,8 @@ curl --location --request DELETE 'http://localhost:3333/api/v1/delete-tasks/{TAS
 ```
 
 ### Backend API -- Prod Environment
-Please first build the code with `npm run build`.
-Then run the produciton code in dist with `npm run prod`.
+Please first build the code with ```npm run build```.
+Then run the produciton code in dist with ```npm run prod```.
 
 ### FrontEnd UI 
 How to run UI APP for TaskAPP ?
