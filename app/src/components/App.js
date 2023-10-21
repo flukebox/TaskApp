@@ -6,6 +6,9 @@ import Task from './Task';
 import Filterbar from './Filterbar';
 import { deleteTask, changeStatus, addTask, selectAllTasks, tasksStateMeta} from '../reducers/tasksSlice';
 import { useSelector, useDispatch } from 'react-redux';
+import ScaleLoader from "react-spinners/ScaleLoader";
+import LoadingOverlay from 'react-loading-overlay';
+import styled from 'styled-components'
 
 import './App.css';
 
@@ -16,6 +19,15 @@ function App(){
   const [status, setStatus] = useState("All");
   const isFailed = () => meta.failed;
   const isLoading = () => meta.isLoading;
+
+  const StyledLoader = styled(LoadingOverlay)`
+    .MyLoader_overlay {
+      background: rgba(55, 55, 55, 0.5);
+      z-index:1100;
+    }
+    &.MyLoader_wrapper--active {
+      overflow: hidden;
+    }`;
 
   
   function addNewTask(task){
@@ -42,7 +54,9 @@ function App(){
   return <Container className="p-3">
         <h1 className="header">Simple Task App </h1>
       <Container className="p-4 mb-4 bg-light rounded-3">
-        <TaskForm addNewTask={addNewTask}></TaskForm>
+        <StyledLoader  classNamePrefix='MyLoader_'  active={isLoading()} spinner={<ScaleLoader size={150}/>}>
+          <TaskForm addNewTask={addNewTask}></TaskForm>
+        </StyledLoader>
       </Container>
       <Container fluid="md" className="p-2 mb-2 bg-light rounded-3">
         <Row>
@@ -50,7 +64,9 @@ function App(){
         </Row>
         <Filterbar status={status} onFiltered={onFiltered}/>
         <Row className='p-2 m-2'>          
-          { isLoading() && <div> Loading tasks...</div>}
+          { isLoading() && 
+              <div> Loading tasks... <ScaleLoader color="#666"/></div>
+          }
           { tasks.map( (task, i) =>  (status === 'All' || task.status === status) && <Task key={i} task={task} id={i} changeStatus={changeTaskStatus} deleteTask={deleteTheTask}></Task>) }
         </Row>
       </Container>

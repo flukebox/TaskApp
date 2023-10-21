@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { client } from '../utils/client'
 import CONFIG from '../config'
+const delay = time => new Promise(res=>setTimeout(res,time));
 
 const tasksSlice = createSlice({
   name: 'tasks',
@@ -68,6 +69,7 @@ const tasksSlice = createSlice({
 export const getTasks = createAsyncThunk( 'tasks/getTasks', async (apiArgs, { dispatch, getState }) => {
     console.log(`We are fetching with getTasks=${apiArgs}`)
     const response = await client.get(`${CONFIG.TASK_HOST_URL}${CONFIG.GET_TASKS}`)
+    await delay(300); // since we're using async functions, we can "await" a promise
     return response.data;  
   }
 )
@@ -75,6 +77,7 @@ export const getTasks = createAsyncThunk( 'tasks/getTasks', async (apiArgs, { di
 export const addTask = createAsyncThunk( 'tasks/addTask', async (apiArgs, { dispatch, getState }) => {
     console.log(`We are adding new task with params=${JSON.stringify(apiArgs)}`)
     const response = await client.post(`${CONFIG.TASK_HOST_URL}${CONFIG.ADD_TASK}`, apiArgs)
+    await delay(300); // since we're using async functions, we can "await" a promise
     return response.data;  
   }
 )
@@ -82,6 +85,7 @@ export const addTask = createAsyncThunk( 'tasks/addTask', async (apiArgs, { disp
 export const changeStatus = createAsyncThunk( 'tasks/changeStatus', async (apiArgs, { dispatch, getState }) => {
   console.log(`We are changing status of the task =${JSON.stringify(apiArgs)}`)
   const response = await client.put(`${CONFIG.TASK_HOST_URL}${CONFIG.CHANGE_STATUS}${apiArgs.id}`, apiArgs)
+  await delay(300); // since we're using async functions, we can "await" a promise
   return response.data;  
   }
 )
@@ -90,9 +94,11 @@ export const changeStatus = createAsyncThunk( 'tasks/changeStatus', async (apiAr
 export const deleteTask = createAsyncThunk( 'tasks/deleteTask', async (apiArgs, { dispatch, getState }) => {
   console.log(`We are deleting the task =${JSON.stringify(apiArgs)}`)
   const response = await client.delete(`${CONFIG.TASK_HOST_URL}${CONFIG.DELETE_TASK}${apiArgs.id}`)
+  await delay(300); // since we're using async functions, we can "await" a promise
   return response.data;  
   }
 )
+
 
 export default tasksSlice.reducer
 export const selectAllTasks = state => { 
