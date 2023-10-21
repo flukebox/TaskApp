@@ -12,14 +12,24 @@ export default function TaskForm({addNewTask}) {
     const [desc, setDesc] = useState(null);
     const [status, setStatus] = useState("To Do");
 
+    function submitForm(e){
+      e.preventDefault(); 
+      if(title){
+        addNewTask({title, desc, status});
+      }
+    }
+
     return (
       <Card style={{ width: '24rem' }}>
         <Card.Body>
           <Card.Title>Add a new Task </Card.Title>
-            <Form onSubmit={(e) => { e.preventDefault(); addNewTask({title, desc, status});}}>
+            <Form onSubmit={submitForm}>
               <Form.Group className="mb-3" controlId="formTaskTitle"  value={title} onChange={(e) => {setTitle(e.target.value);}}>
                 <Form.Label>Title</Form.Label>
-                <Form.Control type="text" placeholder="Enter Task Title" />
+                <Form.Control type="text" placeholder="Enter Task Title"  required />
+                <Form.Control.Feedback type="invalid">
+                    Please set a title for task.
+                </Form.Control.Feedback>
                 <Form.Text className="text-muted">
                       Please enter task title.
                 </Form.Text>
@@ -31,7 +41,7 @@ export default function TaskForm({addNewTask}) {
                     Please enter task description.
                 </Form.Text>
               </Form.Group>  
-              <Form.Select aria-label="Status" value={status} onChange={(e) => {setStatus(e.target.value);}}>
+              <Form.Select aria-label="Status" value={status} required onChange={(e) => {setStatus(e.target.value);}}>
                 <option value="To Do">To Do</option>
                 <option value="In Progress">In Progress</option>
                 <option value="Done">Done</option>

@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
 import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row'
 import TaskForm from './TaskForm';
 import Task from './Task';
+import Filterbar from './Filterbar';
+
 import './App.css';
 
 
 function App(){
   const [tasks, setTasks] = useState([]);
+  const [status, setStatus] = useState("All");
 
   function addNewTask(task){
      console.log(task);
@@ -15,14 +19,29 @@ function App(){
      setTasks(newTasks);
   }
 
+  function onFiltered(_status){
+    setStatus(_status);
+  }
+
+  function changeTaskStatus(i, _status){
+    const newTasks = tasks.slice();
+    newTasks[i].status = _status;
+    setTasks(newTasks);
+  }
+
   return <Container className="p-3">
-        <h1 className="header">Welcome To Our Awesome Task App </h1>
+        <h1 className="header">Simple Task App </h1>
       <Container className="p-4 mb-4 bg-light rounded-3">
         <TaskForm addNewTask={addNewTask}></TaskForm>
       </Container>
-      <Container className="p-5 mb-4 bg-light rounded-3">
-        <h1 className="header">All Tasks</h1>
-        { tasks.map( (task, i) =>  <Task key={i} task={task}></Task>) }
+      <Container fluid="md" className="p-2 mb-2 bg-light rounded-3">
+        <Row>
+          <h1 className="header">All Tasks</h1>
+        </Row>
+        <Filterbar status={status} onFiltered={onFiltered}/>
+        <Row className='p-2 m-2'>
+          { tasks.map( (task, i) =>  (status === 'All' || task.status === status) && <Task key={i} task={task} id={i} changeStatus={changeTaskStatus}></Task>) }
+        </Row>
       </Container>
     </Container>;
 }
