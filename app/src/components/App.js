@@ -1,22 +1,25 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row'
 import TaskForm from './TaskForm';
 import Task from './Task';
 import Filterbar from './Filterbar';
+import { getTasks, addTask, selectAllTasks, isTasksLoading, isTasksLoadingFailed} from '../reducers/tasksSlice';
+import { useSelector, useDispatch } from 'react-redux';
 
 import './App.css';
 
 
 function App(){
-  const [tasks, setTasks] = useState([]);
+  const dispatch = useDispatch()
+  const tasks = useSelector(state => selectAllTasks(state))
+  const isLoading = useSelector(state => isTasksLoading(state))
+  const isFailed = useSelector(state => isTasksLoadingFailed(state))
   const [status, setStatus] = useState("All");
 
   function addNewTask(task){
      console.log(task);
-     const newTasks = tasks.slice();
-     newTasks.push(task);
-     setTasks(newTasks);
+     dispatch(addTask(...task));
   }
 
   function onFiltered(_status){
@@ -26,9 +29,9 @@ function App(){
   function changeTaskStatus(i, _status){
     const newTasks = tasks.slice();
     newTasks[i].status = _status;
-    setTasks(newTasks);
+    //setTasks(newTasks);
   }
-
+  
   return <Container className="p-3">
         <h1 className="header">Simple Task App </h1>
       <Container className="p-4 mb-4 bg-light rounded-3">
@@ -40,6 +43,7 @@ function App(){
         </Row>
         <Filterbar status={status} onFiltered={onFiltered}/>
         <Row className='p-2 m-2'>
+          { isLoading && <div> Loading tasks...</div>}
           { tasks.map( (task, i) =>  (status === 'All' || task.status === status) && <Task key={i} task={task} id={i} changeStatus={changeTaskStatus}></Task>) }
         </Row>
       </Container>

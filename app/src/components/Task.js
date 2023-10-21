@@ -7,7 +7,6 @@ import Form from 'react-bootstrap/Form';
 export default function Task({task, changeStatus, id}){
     const [show, toggleShow] = useState(true);
     const handleChange = (e) =>  changeStatus(id, e.target.value);
-
     return (<>
     { show &&  <Toast className="m-2 p-2" show={show} onClose={() => toggleShow(false)}>
         <Toast.Header>
@@ -15,7 +14,7 @@ export default function Task({task, changeStatus, id}){
         </Toast.Header>
         <Toast.Body> 
             <div className='center m-2 p-2'>
-            { task.desc }  
+            { task.description }  
             </div>
             <div className='center p-1'>
                 <Form>

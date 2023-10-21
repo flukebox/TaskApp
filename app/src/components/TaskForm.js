@@ -9,13 +9,13 @@ import Card from 'react-bootstrap/Card'
  */
 export default function TaskForm({addNewTask}) {
     const [title, setTitle] = useState(null);
-    const [desc, setDesc] = useState(null);
+    const [description, setDesc] = useState(null);
     const [status, setStatus] = useState("To Do");
 
     function submitForm(e){
       e.preventDefault(); 
       if(title){
-        addNewTask({title, desc, status});
+        addNewTask({title, description, status});
       }
     }
 
@@ -34,7 +34,7 @@ export default function TaskForm({addNewTask}) {
                       Please enter task title.
                 </Form.Text>
               </Form.Group>    
-              <Form.Group className="mb-3" controlId="taskStatus" value={desc} onChange={(e) => {setDesc(e.target.value);}}>
+              <Form.Group className="mb-3" controlId="taskStatus" value={description} onChange={(e) => {setDesc(e.target.value);}}>
                 <Form.Label>Description</Form.Label>
                 <Form.Control type="text" placeholder="Enter Task Details" />
                 <Form.Text className="text-muted">
