@@ -4,7 +4,9 @@ import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
 
 export default function Filterbar({onFiltered, status}) {  
     function handleClick(e){
-      onFiltered(e.target.value);
+      e.preventDefault(); 
+      // on change if selection is different from current one
+      if(e.target.value && status !== e.target.value) onFiltered(e.target.value);
     }
 
     return (
