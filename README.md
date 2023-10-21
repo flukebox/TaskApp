@@ -79,7 +79,7 @@ curl --location --request DELETE 'http://localhost:3333/api/v1/delete-tasks/{TAS
 Please first build the code with ```npm run build```.
 Then run the produciton code in dist with ```npm run prod```.
 
-### FrontEnd UI 
+## FrontEnd UI 
 How to run UI APP for TaskAPP ?
 First go to folder `app`.
 Install all project dependencies with node command.
@@ -87,10 +87,23 @@ Install all project dependencies with node command.
 npm install --include dev
 ```
 
+### FrontEnd UI -- Test Environment
+
 Below command will run this app.
 ```
 npm start
 ```
 
+### FrontEnd UI -- Prod Environment
 Make sure that you have enabled `CORS` so that app could connect to endpoint on localhost etc.
-Change app/src/config to point to correct `TASK_HOST_URL`.
+Please make sure to modify `./src/config.js` pointing to right backend apis.
+Change `app/src/config` to point to correct `TASK_HOST_URL`.
+
+```
+  npm install -g serve
+  serve -s build
+```
+
+
+
+http://localhost:65523

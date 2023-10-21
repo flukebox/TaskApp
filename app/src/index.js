@@ -5,13 +5,9 @@ import App from './components/App';
 import reportWebVitals from './reportWebVitals';
 import store from './store/store'
 import { Provider } from 'react-redux'
-import { getTasks } from './reducers/tasksSlice';
 
 // Importing the Bootstrap CSS
 import 'bootstrap/dist/css/bootstrap.min.css';
-
-//Dispatch the getTasks() before our root component renders
-store.dispatch(getTasks())
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

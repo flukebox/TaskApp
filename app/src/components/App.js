@@ -4,7 +4,7 @@ import Row from 'react-bootstrap/Row'
 import TaskForm from './TaskForm';
 import Task from './Task';
 import Filterbar from './Filterbar';
-import { deleteTask, changeStatus, addTask, selectAllTasks, tasksStateMeta, consumeNotification} from '../reducers/tasksSlice';
+import { deleteTask, changeStatus, addTask, getTasks, selectAllTasks, tasksStateMeta, consumeNotification} from '../reducers/tasksSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import ScaleLoader from "react-spinners/ScaleLoader";
 import LoadingOverlay from 'react-loading-overlay';
@@ -31,6 +31,7 @@ function App(){
     }`;
 
   
+  
   function addNewTask(task){
      console.log("adding new task", task);
      dispatch(addTask({...task}));
@@ -51,22 +52,34 @@ function App(){
     dispatch(changeStatus({id:tasks[i]._id, status:_status}));
   }
 
+  // toaster notificaiton
   const notify = (msg) => toast(msg);  
+
+  // consume notificaiton being piled by async requests
   useEffect(() => {
     if (meta?.notify){
       // notify
       let notification = meta.notify[0];
       if (notification && notification.length !== 0){
+        // dispatch that we have consumed this notificaiton
         dispatch(consumeNotification())  
+        // notify via toast
         notify(notification);
       }
     }
   });
 
-  console.log("isFailed", isFailed(), "isLoading", isLoading());
+  useEffect(() =>{
+    //Dispatch the getTasks()
+    dispatch(getTasks());
+  }, [dispatch])
+
+
+
   return <Container className="p-3">
         <h1 className="header">Simple Task App </h1>
       <Container className="p-4 mb-4 bg-light rounded-3">
+          {/** show the loader if we loading something */}
         <StyledLoader  classNamePrefix='MyLoader_'  active={isLoading()} spinner={<ScaleLoader size={150}/>}>
           <TaskForm addNewTask={addNewTask}></TaskForm>
         </StyledLoader>
@@ -78,6 +91,7 @@ function App(){
         </Row>
         <Filterbar status={status} onFiltered={onFiltered}/>
         <Row className='p-2 m-2'>          
+          {/** show the loader if we loading something */}
           { isLoading() && 
               <div> Loading tasks... <ScaleLoader color="#666"/></div>
           }
