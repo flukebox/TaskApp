@@ -8,7 +8,7 @@ const delay = time => new Promise(res => setTimeout(res, time));
  */
 const tasksSlice = createSlice({
   name: 'tasks',
-  initialState: { meta: { isLoading: false, failed: false, notify: [] } },
+  initialState: { meta: { isLoading: false, failed: false, notify: [] }, tasks:[]},
   reducers: {
     consumeNotification(state, action) {
       state.meta.notify.shift()
@@ -27,7 +27,7 @@ const tasksSlice = createSlice({
       })
       .addCase(getTasks.fulfilled, (state, action) => {
         console.log("getTasks.fulfilled", state, action);
-        action.payload.tasks.map((task, i) => state[task._id] = task);
+        state.tasks = action.payload.tasks;
         state.meta = { ...state.meta, isLoading: false, failed: false };
         state.meta.notify.push("Successfully, Loaded tasks");
       })
@@ -47,7 +47,7 @@ const tasksSlice = createSlice({
       })
       .addCase(addTask.fulfilled, (state, action) => {
         console.log("addTask.fulfilled", state, action);
-        action.payload.tasks.map((task, i) => state[task._id] = task);
+        state.tasks = action.payload.tasks;
         state.meta = { ...state.meta, isLoading: false, failed: false };
         state.meta.notify.push("Successfully, added task");
       })
@@ -67,7 +67,7 @@ const tasksSlice = createSlice({
       })
       .addCase(changeStatus.fulfilled, (state, action) => {
         console.log("changeStatus.fulfilled", state, action);
-        action.payload.tasks.map((task, i) => state[task._id] = task);
+        state.tasks = action.payload.tasks;
         state.meta = { ...state.meta, isLoading: false, failed: false };
         state.meta.notify.push("Successfully, changed task status");
       })
@@ -87,8 +87,7 @@ const tasksSlice = createSlice({
       })
       .addCase(deleteTask.fulfilled, (state, action) => {
         console.log("deleteTask.fulfilled", state, action);
-        action.payload.tasks.map((task, i) => state[task._id] = task);
-        delete state[action.meta.arg.id];
+        state.tasks = action.payload.tasks;
         state.meta = { ...state.meta, isLoading: false, failed: false };
         state.meta.notify.push("Successfully, deleted task");
       })
@@ -150,9 +149,5 @@ export const deleteTask = createAsyncThunk('tasks/deleteTask', async (apiArgs, {
 
 export const { consumeNotification } = tasksSlice.actions
 export default tasksSlice.reducer
-export const selectAllTasks = state => {
-  const data = { ...state.tasks };
-  delete data.meta;
-  return Object.values(data);
-}
-export const tasksStateMeta = state => { return { ...state.tasks.meta } }
+export const selectAllTasks = state => state.tasks.tasks
+export const tasksStateMeta = state => state.tasks.meta
