@@ -11,6 +11,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
+  /* we are connecting react components to store by provider wrapper */
   <Provider store={store}>
     <React.StrictMode>
       <App />

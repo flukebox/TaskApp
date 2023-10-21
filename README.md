@@ -87,6 +87,12 @@ Install all project dependencies with node command.
 npm install --include dev
 ```
 
+As, We've added few older deps, above command might fail. So, let's force install.
+```
+npm install --include dev -f
+```
+
+
 ### FrontEnd UI -- Test Environment
 
 Below command will run this app.
@@ -103,7 +109,3 @@ Change `app/src/config` to point to correct `TASK_HOST_URL`.
   npm install -g serve
   serve -s build
 ```
-
-
-
-http://localhost:65523

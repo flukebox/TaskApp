@@ -2,6 +2,7 @@ import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
 
+// simple filter bar for tasks
 export default function Filterbar({onFiltered, status}) {  
     function handleClick(e){
       e.preventDefault(); 
