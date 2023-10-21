@@ -1,5 +1,5 @@
 {
-  "name": "TaskApp",
+  "name": "TaskApp Api",
   "version": "1.0.0",
   "description": "A simple nodeJs, react, mongoDB app to manage tasks",
   "main": "index.js",
