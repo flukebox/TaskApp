@@ -4,63 +4,63 @@ import CONFIG from '../config'
 
 const tasksSlice = createSlice({
   name: 'tasks',
-  initialState: {},
+  initialState: {meta:{isLoading:false, failed:false}},
   reducers: {
   },
   extraReducers(builder){ 
     builder
     .addCase(getTasks.pending, (state, action) => {
-        state = {...state, isLoading:true, failed:false}
-        console.log("getTasks.pending", state, action);
+      console.log("getTasks.pending", state, action);
+      state.meta = {isLoading:true, failed:false};
     })
     .addCase(getTasks.fulfilled, (state, action) => {
         console.log("getTasks.fulfilled", state, action);
         action.payload.tasks.map((task, i) =>  state[task._id] =  task);
-        state = {...state, isLoading:false, failed:false}
+        state.meta = {isLoading:false, failed:false};
     })
     .addCase(getTasks.rejected, (state, action) => {
-      state = {...state, isLoading:false, failed:true}
       console.log("getTasks.rejected", state, action);
+      state.meta = {isLoading:false, failed:true};
     })
     .addCase(addTask.pending, (state, action) => {
-        state = {...state, isLoading:true, failed:false}
-        console.log("addTask.pending", state, action);
+      state.meta = {isLoading:true, failed:false};
+      console.log("addTask.pending", state, action);
     })
     .addCase(addTask.fulfilled, (state, action) => {
         console.log("addTask.fulfilled", state, action);
         action.payload.tasks.map((task, i) =>  state[task._id] =  task);
-        state = {...state, isLoading:false, failed:false}
+        state.meta = {isLoading:false, failed:false};
     })
     .addCase(addTask.rejected, (state, action) => {
-      state = {...state, isLoading:false, failed:true}
       console.log("addTask.rejected", state, action);
+      state.meta = {isLoading:false, failed:true};
     })
     .addCase(changeStatus.pending, (state, action) => {
-      state = {...state, isLoading:true, failed:false}
+      state.meta = {isLoading:true, failed:false};
       console.log("changeStatus.pending", state, action);
     })
     .addCase(changeStatus.fulfilled, (state, action) => {
         console.log("changeStatus.fulfilled", state, action);
         action.payload.tasks.map((task, i) =>  state[task._id] =  task);
-        state = {...state, isLoading:false, failed:false}
+        state.meta = {isLoading:false, failed:false};
     })
     .addCase(changeStatus.rejected, (state, action) => {
-      state = {...state, isLoading:false, failed:true}
       console.log("changeStatus.rejected", state, action);
+      state.meta = {isLoading:false, failed:true};
     })
     .addCase(deleteTask.pending, (state, action) => {
-      state = {...state, isLoading:true, failed:false}
+      state.meta = {isLoading:true, failed:false};
       console.log("deleteTask.pending", state, action);
     })
     .addCase(deleteTask.fulfilled, (state, action) => {
         console.log("deleteTask.fulfilled", state, action);
         action.payload.tasks.map((task, i) =>  state[task._id] =  task);
         delete state[action.meta.arg.id];
-        state = {...state, isLoading:false, failed:false}
+        state.meta = {isLoading:false, failed:false};
     })
     .addCase(deleteTask.rejected, (state, action) => {
-      state = {...state, isLoading:false, failed:true}
       console.log("deleteTask.rejected", state, action);
+      state.meta = {isLoading:false, failed:true};
     })
   }
 })
@@ -95,6 +95,9 @@ export const deleteTask = createAsyncThunk( 'tasks/deleteTask', async (apiArgs, 
 )
 
 export default tasksSlice.reducer
-export const selectAllTasks = state => Object.values(state.tasks);
-export const isTasksLoading = state => state.tasks.isLoading ? true: false
-export const isTasksLoadingFailed = state => state.tasks.failed ? true: false
+export const selectAllTasks = state => { 
+  const data = {...state.tasks};
+  delete data.meta;
+  return Object.values(data);
+} 
+export const tasksStateMeta = state => { return {...state.tasks.meta}}

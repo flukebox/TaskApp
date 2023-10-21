@@ -4,7 +4,7 @@ import Row from 'react-bootstrap/Row'
 import TaskForm from './TaskForm';
 import Task from './Task';
 import Filterbar from './Filterbar';
-import { deleteTask, changeStatus, addTask, selectAllTasks, isTasksLoading, isTasksLoadingFailed} from '../reducers/tasksSlice';
+import { deleteTask, changeStatus, addTask, selectAllTasks, tasksStateMeta} from '../reducers/tasksSlice';
 import { useSelector, useDispatch } from 'react-redux';
 
 import './App.css';
@@ -12,9 +12,10 @@ import './App.css';
 function App(){
   const dispatch = useDispatch()
   const tasks = useSelector(state => selectAllTasks(state))
-  const isLoading = useSelector(state => isTasksLoading(state))
-  const isFailed = useSelector(state => isTasksLoadingFailed(state))
+  const meta = useSelector(state => tasksStateMeta(state))
   const [status, setStatus] = useState("All");
+  const isFailed = () => meta.failed;
+  const isLoading = () => meta.isLoading;
 
   
   function addNewTask(task){
@@ -37,6 +38,7 @@ function App(){
     dispatch(changeStatus({id:tasks[i]._id, status:_status}));
   }
   
+  console.log("isFailed", isFailed(), "isLoading", isLoading());
   return <Container className="p-3">
         <h1 className="header">Simple Task App </h1>
       <Container className="p-4 mb-4 bg-light rounded-3">
@@ -48,7 +50,7 @@ function App(){
         </Row>
         <Filterbar status={status} onFiltered={onFiltered}/>
         <Row className='p-2 m-2'>          
-          { isLoading && <div> Loading tasks...</div>}
+          { isLoading() && <div> Loading tasks...</div>}
           { tasks.map( (task, i) =>  (status === 'All' || task.status === status) && <Task key={i} task={task} id={i} changeStatus={changeTaskStatus} deleteTask={deleteTheTask}></Task>) }
         </Row>
       </Container>
