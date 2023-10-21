@@ -3,7 +3,7 @@ const CONFIG  = {
     GET_TASKS : "/tasks",
     ADD_TASK:   "/add-task",
     UPDATE_TASK : "/update-status/",
-    CHANGE_TASK : "/change-status/",
+    CHANGE_STATUS : "/change-status/",
     DELETE_TASK : "/delete-tasks/",
 };
   

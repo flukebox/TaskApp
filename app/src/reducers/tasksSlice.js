@@ -35,6 +35,33 @@ const tasksSlice = createSlice({
       state = {...state, isLoading:false, failed:true}
       console.log("addTask.rejected", state, action);
     })
+    .addCase(changeStatus.pending, (state, action) => {
+      state = {...state, isLoading:true, failed:false}
+      console.log("changeStatus.pending", state, action);
+    })
+    .addCase(changeStatus.fulfilled, (state, action) => {
+        console.log("changeStatus.fulfilled", state, action);
+        action.payload.tasks.map((task, i) =>  state[task._id] =  task);
+        state = {...state, isLoading:false, failed:false}
+    })
+    .addCase(changeStatus.rejected, (state, action) => {
+      state = {...state, isLoading:false, failed:true}
+      console.log("changeStatus.rejected", state, action);
+    })
+    .addCase(deleteTask.pending, (state, action) => {
+      state = {...state, isLoading:true, failed:false}
+      console.log("deleteTask.pending", state, action);
+    })
+    .addCase(deleteTask.fulfilled, (state, action) => {
+        console.log("deleteTask.fulfilled", state, action);
+        action.payload.tasks.map((task, i) =>  state[task._id] =  task);
+        delete state[action.meta.arg.id];
+        state = {...state, isLoading:false, failed:false}
+    })
+    .addCase(deleteTask.rejected, (state, action) => {
+      state = {...state, isLoading:false, failed:true}
+      console.log("deleteTask.rejected", state, action);
+    })
   }
 })
 
@@ -52,6 +79,20 @@ export const addTask = createAsyncThunk( 'tasks/addTask', async (apiArgs, { disp
   }
 )
 
+export const changeStatus = createAsyncThunk( 'tasks/changeStatus', async (apiArgs, { dispatch, getState }) => {
+  console.log(`We are changing status of the task =${JSON.stringify(apiArgs)}`)
+  const response = await client.put(`${CONFIG.TASK_HOST_URL}${CONFIG.CHANGE_STATUS}${apiArgs.id}`, apiArgs)
+  return response.data;  
+  }
+)
+
+
+export const deleteTask = createAsyncThunk( 'tasks/deleteTask', async (apiArgs, { dispatch, getState }) => {
+  console.log(`We are deleting the task =${JSON.stringify(apiArgs)}`)
+  const response = await client.delete(`${CONFIG.TASK_HOST_URL}${CONFIG.DELETE_TASK}${apiArgs.id}`)
+  return response.data;  
+  }
+)
 
 export default tasksSlice.reducer
 export const selectAllTasks = state => Object.values(state.tasks);
