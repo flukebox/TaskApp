@@ -11,7 +11,7 @@ We have two part of the app, expressjs base backend and react based frontend.
 `app` folder contains code for tasks frontend app.
 
 # BEFORE YOU RUN
-Please make sure you have mongodb installed.
+Please make sure you have mongodb installed and have 'tasks' as database created in it. otherwise change `.env` likewise which is mentioned below.
 
 ## HOW TO RUN
 We need to first start the backend service and then start the frontend app

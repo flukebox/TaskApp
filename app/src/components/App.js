@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row'
 import TaskForm from './TaskForm';
@@ -9,7 +9,6 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import './App.css';
 
-
 function App(){
   const dispatch = useDispatch()
   const tasks = useSelector(state => selectAllTasks(state))
@@ -17,9 +16,10 @@ function App(){
   const isFailed = useSelector(state => isTasksLoadingFailed(state))
   const [status, setStatus] = useState("All");
 
+  
   function addNewTask(task){
      console.log("adding new task", task);
-     dispatch(addTask(...task));
+     dispatch(addTask({...task}));
   }
 
   function onFiltered(_status){
@@ -47,7 +47,7 @@ function App(){
           <h1 className="header">All Tasks</h1>
         </Row>
         <Filterbar status={status} onFiltered={onFiltered}/>
-        <Row className='p-2 m-2'>
+        <Row className='p-2 m-2'>          
           { isLoading && <div> Loading tasks...</div>}
           { tasks.map( (task, i) =>  (status === 'All' || task.status === status) && <Task key={i} task={task} id={i} changeStatus={changeTaskStatus} deleteTask={deleteTheTask}></Task>) }
         </Row>
