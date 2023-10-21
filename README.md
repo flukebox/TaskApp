@@ -91,3 +91,6 @@ Below command will run this app.
 ```
 npm start
 ```
+
+Make sure that you have enabled `CORS` so that app could connect to endpoint on localhost etc.
+Change app/src/config to point to correct `TASK_HOST_URL`.
