@@ -5,63 +5,78 @@ const delay = time => new Promise(res=>setTimeout(res,time));
 
 const tasksSlice = createSlice({
   name: 'tasks',
-  initialState: {meta:{isLoading:false, failed:false}},
+  initialState: {meta:{isLoading:false, failed:false, notify:[]}},
   reducers: {
+    consumeNotification(state, action){
+      state.meta.notify.shift()
+    }
   },
   extraReducers(builder){ 
     builder
     .addCase(getTasks.pending, (state, action) => {
       console.log("getTasks.pending", state, action);
-      state.meta = {isLoading:true, failed:false};
+      state.meta = {...state.meta, isLoading:true, failed:false};
+      state.meta.notify.push("Loading tasks");
     })
     .addCase(getTasks.fulfilled, (state, action) => {
         console.log("getTasks.fulfilled", state, action);
         action.payload.tasks.map((task, i) =>  state[task._id] =  task);
-        state.meta = {isLoading:false, failed:false};
-    })
+        state.meta = {...state.meta, isLoading:false, failed:false};
+        state.meta.notify.push("Successfully, Loaded tasks");
+      })
     .addCase(getTasks.rejected, (state, action) => {
       console.log("getTasks.rejected", state, action);
-      state.meta = {isLoading:false, failed:true};
+      state.meta = {...state.meta, isLoading:false, failed:true};
+      state.meta.notify.push("Loading tasks failed");
     })
     .addCase(addTask.pending, (state, action) => {
-      state.meta = {isLoading:true, failed:false};
+      state.meta = {...state.meta, isLoading:true, failed:false};
       console.log("addTask.pending", state, action);
+      state.meta.notify.push("Adding new task");
     })
     .addCase(addTask.fulfilled, (state, action) => {
         console.log("addTask.fulfilled", state, action);
         action.payload.tasks.map((task, i) =>  state[task._id] =  task);
-        state.meta = {isLoading:false, failed:false};
+        state.meta = {...state.meta, isLoading:false, failed:false};
+        state.meta.notify.push("Successfully, added task");
     })
     .addCase(addTask.rejected, (state, action) => {
       console.log("addTask.rejected", state, action);
-      state.meta = {isLoading:false, failed:true};
+      state.meta = {...state.meta, isLoading:false, failed:true};
+      state.meta.notify.push("Adding task failed");
     })
     .addCase(changeStatus.pending, (state, action) => {
-      state.meta = {isLoading:true, failed:false};
+      state.meta = {...state.meta, isLoading:true, failed:false};
       console.log("changeStatus.pending", state, action);
+      state.meta.notify.push("Changing Task status");
     })
     .addCase(changeStatus.fulfilled, (state, action) => {
         console.log("changeStatus.fulfilled", state, action);
         action.payload.tasks.map((task, i) =>  state[task._id] =  task);
-        state.meta = {isLoading:false, failed:false};
+        state.meta = {...state.meta, isLoading:false, failed:false};
+        state.meta.notify.push("Successfully, changed task status");
     })
     .addCase(changeStatus.rejected, (state, action) => {
       console.log("changeStatus.rejected", state, action);
-      state.meta = {isLoading:false, failed:true};
+      state.meta = {...state.meta, isLoading:false, failed:true};
+      state.meta.notify.push("Changing status of task failed");
     })
     .addCase(deleteTask.pending, (state, action) => {
-      state.meta = {isLoading:true, failed:false};
+      state.meta = {...state.meta, isLoading:true, failed:false};
       console.log("deleteTask.pending", state, action);
+      state.meta.notify.push("deleting Task");
     })
     .addCase(deleteTask.fulfilled, (state, action) => {
         console.log("deleteTask.fulfilled", state, action);
         action.payload.tasks.map((task, i) =>  state[task._id] =  task);
         delete state[action.meta.arg.id];
-        state.meta = {isLoading:false, failed:false};
+        state.meta = {...state.meta, isLoading:false, failed:false};
+        state.meta.notify.push("Successfully, deleted task");
     })
     .addCase(deleteTask.rejected, (state, action) => {
       console.log("deleteTask.rejected", state, action);
-      state.meta = {isLoading:false, failed:true};
+      state.meta = {...state.meta, isLoading:false, failed:true};
+      state.meta.notify.push("deleting task failed");
     })
   }
 })
@@ -99,7 +114,7 @@ export const deleteTask = createAsyncThunk( 'tasks/deleteTask', async (apiArgs, 
   }
 )
 
-
+export const { consumeNotification } = tasksSlice.actions
 export default tasksSlice.reducer
 export const selectAllTasks = state => { 
   const data = {...state.tasks};

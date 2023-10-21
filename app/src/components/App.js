@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row'
 import TaskForm from './TaskForm';
 import Task from './Task';
 import Filterbar from './Filterbar';
-import { deleteTask, changeStatus, addTask, selectAllTasks, tasksStateMeta} from '../reducers/tasksSlice';
+import { deleteTask, changeStatus, addTask, selectAllTasks, tasksStateMeta, consumeNotification} from '../reducers/tasksSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import ScaleLoader from "react-spinners/ScaleLoader";
 import LoadingOverlay from 'react-loading-overlay';
 import styled from 'styled-components'
+import toast, { Toaster } from 'react-hot-toast';
 
 import './App.css';
 
@@ -49,7 +50,19 @@ function App(){
     console.log("updating the status of the task", tasks[i], "new Status = ", _status);
     dispatch(changeStatus({id:tasks[i]._id, status:_status}));
   }
-  
+
+  const notify = (msg) => toast(msg);  
+  useEffect(() => {
+    if (meta?.notify){
+      // notify
+      let notification = meta.notify[0];
+      if (notification && notification.length !== 0){
+        dispatch(consumeNotification())  
+        notify(notification);
+      }
+    }
+  });
+
   console.log("isFailed", isFailed(), "isLoading", isLoading());
   return <Container className="p-3">
         <h1 className="header">Simple Task App </h1>
@@ -57,6 +70,7 @@ function App(){
         <StyledLoader  classNamePrefix='MyLoader_'  active={isLoading()} spinner={<ScaleLoader size={150}/>}>
           <TaskForm addNewTask={addNewTask}></TaskForm>
         </StyledLoader>
+        <Toaster position="top-right" reverseOrder={true}/>
       </Container>
       <Container fluid="md" className="p-2 mb-2 bg-light rounded-3">
         <Row>
